@@ -1,0 +1,63 @@
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. PayrollProcessor.
+       AUTHOR. KIMBERLY BORTLE.
+
+
+       ENVIRONMENT DIVISION.
+       INPUT-OUTPUT SECTION.
+       FILE-CONTROL.
+           SELECT VENDOR-INPUT-FILE ASSIGN TO "payroll.dat"
+               ORGANIZATION IS LINE SEQUENTIAL.
+
+           SELECT VENDOR-OUTPUT-FILE ASSIGN TO "payroll.doc"
+               ORGANIZATION IS LINE SEQUENTIAL.
+
+       DATA DIVISION.
+       FILE SECTION.
+       FD  VENDOR-INPUT-FILE  RECORDING MODE F.
+       01                      PIC X(80).
+       FD VENDOR-OUTPUT-FILE   RECORDING MODE F.
+       01 PRINT-LINE           PIC X(132).
+
+       WORKING-STORAGE SECTION.
+       01  WORKING-VARIABLES.
+           05 EOF-PAYROLL-SW           PIC X(3) VALUE "NO".
+           05 PAYCHECK-SW              PIC 9(5)V99 VALUE ZERO.
+
+       01 VENDOR-INPUT-RECORD.
+           05  SSN-IN                  PIC X(9).
+           05  RATE-IN                 PIC 9(2)V9(2).
+           05  HOURS-IN                PIC 99.
+           05  NAME-IN                 PIC X(20).
+
+       01 PAYROLL-OUT.
+           05  SSN-OUT                 PIC X(9).
+           05  RATE-OUT                PIC $9.99.
+           05  HOURS-OUT               PIC 99.
+           05  PAYCHECK-OUT            PIC $9,999,999.
+           05  NAME-OUT                PIC X(20).
+       PROCEDURE DIVISION.
+
+       OPEN INPUT VENDOR-INPUT-FILE
+       DISPLAY "SSN-IN RATE-IN HOURS-IN    NAME-IN         PAYCHECK-OUT"
+       DISPLAY "-----------------------------------------------------"
+
+       PERFORM UNTIL EOF-PAYROLL-SW = "YES"
+           READ VENDOR-INPUT-FILE
+           AT END MOVE 'YES' TO EOF-PAYROLL-SW
+           NOT AT END
+               MOVE SSN-IN TO SSN-OUT
+               MOVE RATE-IN TO RATE-OUT
+               MOVE HOURS-IN TO HOURS-OUT
+
+               COMPUTE PAYCHECK-SW = RATE-IN * HOURS-IN
+               MOVE PAYCHECK-SW TO PAYCHECK-OUT
+
+               DISPLAY SSN-IN ' ' RATE-IN ' ' HOURS-IN ' ' NAME-IN ' '
+               PAYCHECK-OUT
+
+               END-READ
+               END-PERFORM
+
+               CLOSE VENDOR-INPUT-FILE
+               STOP RUN.
