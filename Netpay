@@ -1,0 +1,55 @@
+// Kimberly Bortle JAVA 3
+// BCIS 3630.2 J3A_Bortle
+
+// need util scanner
+import java.util.Scanner;
+
+public class J3A_Bortle
+
+{
+   public static void main(String[] args)
+      {
+      // variables
+         Scanner input = new Scanner(System.in);
+         int employeeNum;
+         double grossPay, stateTax, federalTax, ficaWithholding;
+         double totalGrossPay = 0, totalStateTax = 0, totalFederalTax = 0, totalFicaWithholding = 0, totalNetPay = 0;
+         
+         //do while loop
+         do
+            {
+               System.out.print ("Enter employee number (0 to quit): " );
+               employeeNum = input.nextInt();
+               
+               // ask to input information
+               if (employeeNum !=0)
+                  {
+                System.out.print("Enter gross pay: $");
+                grossPay = input.nextDouble();
+                System.out.print("Enter state tax: $");
+                stateTax = input.nextDouble();
+                System.out.print("Enter federal tax: $");
+                federalTax = input.nextDouble();
+                System.out.print("Enter FICA withholding: $");
+                ficaWithholding = input.nextDouble();
+                
+              //total formulas for all inputs and net pay
+                totalGrossPay += grossPay;
+                totalStateTax += stateTax;
+                totalFederalTax += federalTax;
+                totalFicaWithholding += ficaWithholding;
+               
+                double netPay = grossPay - stateTax - federalTax - ficaWithholding;
+                totalNetPay += netPay;
+                }
+      } 
+        while (employeeNum != 0);
+        
+        //print out total and net pay 
+        System.out.printf("Gross Pay: $%.2f\n", totalGrossPay);
+        System.out.printf("State Tax: $%.2f\n", totalStateTax);
+        System.out.printf("Federal Tax: $%.2f\n", totalFederalTax);
+        System.out.printf("FICA Withholding: $%.2f\n", totalFicaWithholding);
+        System.out.printf("Net Amount: $%.2f\n", totalNetPay);
+   }
+}
